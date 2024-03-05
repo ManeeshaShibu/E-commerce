@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../service/product.service';
-import { CartService } from '../cart/cart.service'; 
+import { CartService } from '../cart/cart.service';
 import { CartItem } from '../cart/cart.model';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Product } from '../product/product.model';
 
 @Component({
   selector: 'app-product-details',
@@ -11,53 +14,84 @@ import { CartItem } from '../cart/cart.model';
 })
 export class ProductDetailsComponent implements OnInit {
   productId: string = '';
-  product: any = {}; 
+  product: any = {};
+  editMode: boolean = false;
+  editedProduct: any = {};
   cartItems: CartItem[] = [];
+  isLoading: boolean = false; 
 
-  constructor(private route: ActivatedRoute, 
-              private productService: ProductService,
-              private cartService: CartService) { }
-
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.productId = id !== null ? id : '';
-    console.log('Product ID:', this.productId);
-    this.getProductDetails();
-  }
-
-  getProductDetails(): void {
-    console.log('Fetching product details...');
-    this.productService.getProductById(this.productId)
-      .subscribe(
-        (response: any) => {
-          console.log('API response:', response);
-          this.product = response || {}; 
-          console.log('Product:', this.product);
-        },
-        (error: any) => { 
-          console.error('Error fetching product details:', error);
-        }
-      );
-  }
-
-  addToCart(product: any) {
-    this.cartService.addToCart(product); 
-    this.cartItems = this.cartService.getCartItems(); 
-  }
-
-  updateProductTitle(updatedTitle: string) {
-    if (this.product) { 
-      const productId = this.product.id;
-      this.productService.updateProductTitle(productId, updatedTitle)
+  constructor(private route: ActivatedRoute,
+    private productService: ProductService,
+    private cartService: CartService,
+    private router: Router) { }
+    ngOnInit() {
+      const id = this.route.snapshot.paramMap.get('id');
+      this.productId = id !== null ? id : '';
+      console.log('Product ID:', this.productId);
+      this.getProductDetails();
+      this.cartItems = this.cartService.getCartItems();
+    }
+  
+    getProductDetails() {
+      console.log('Fetching product details...');
+      this.isLoading = true;
+      this.productService.getProductById(this.productId)
         .subscribe(
-          (response: any) => {
-            console.log('Product title updated successfully:', response);
-            this.product.title = updatedTitle;
+          (response: Product) => {
+            console.log('API response:', response);
+            this.product = response;
+            console.log('Product:', this.product);
+            this.editedProduct = { ...response };
           },
-          (error: any) => {
-            console.error('Error updating product title:', error);
+          (error: HttpErrorResponse) => {
+            console.error('Error fetching product details:', error);
+          },
+          () => {
+            this.isLoading = false;
           }
         );
     }
+  
+    toggleEditMode() {
+      this.editMode = !this.editMode;
+    }
+  
+    saveProductChanges() {
+      console.log('Saving product changes...');
+  
+      if (this.product && this.product.id) {
+        console.log('Product ID:', this.product.id);
+        console.log('Updated Product:', this.editedProduct);
+  
+        const { id, ...updatedProductWithoutId } = this.editedProduct;
+  
+        this.isLoading = true;
+        this.productService.updateProduct(this.product.id, updatedProductWithoutId)
+          .subscribe(
+            (updatedProduct: any) => {
+              console.log('Product updated successfully:', updatedProduct);
+              this.product = { ...this.product, ...updatedProduct };
+              this.editMode = false;
+            },
+            (error: HttpErrorResponse) => {
+              console.error('Error updating product:', error);
+            },
+            () => {
+              this.isLoading = false;
+            }
+          );
+      } else {
+        console.error('Cannot save changes: Product or Product ID is missing.');
+      }
+    }
+
+  cancelEdit() {
+    this.editedProduct = { ...this.product };
+    this.editMode = false;
+  }
+
+  addToCart(product: any) {
+    this.cartService.addToCart(product);
+    this.cartItems = this.cartService.getCartItems();
   }
 }

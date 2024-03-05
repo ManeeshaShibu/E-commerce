@@ -1,9 +1,10 @@
-// app.component.ts
 import { Component } from '@angular/core';
 import { ProductService } from '../app/service/product.service';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../app/cart/cart.service';
 import { CartItem } from '../app/cart/cart.model';
+import { AuthService } from './service/authservice';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,39 +12,41 @@ import { CartItem } from '../app/cart/cart.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  isLoggedIn: boolean = false;
+  error: string = '';
   cartItems: CartItem[] = [];
-  registerObj: any = {
-    "CustId": 0,
-    "Name": "",
-    "MobileNo": "",
-    "Password": ""
-  };
   loginObj: any = {
     "UserName": "",
-    "UserPassword": ""
+    "Password": ""
   };
-  loggedObj: any = {};
-  loginModelClass: string = '';
 
-  constructor(private productService: ProductService, private http: HttpClient, private cartService: CartService) {
+  constructor(private productService: ProductService, private http: HttpClient, private cartService: CartService, private authService: AuthService, private router: Router) {
     this.cartItems = this.cartService.getCartItems();
-  }
-
-  onRegister() {
-    // Handle registration
+    this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   onLogin() {
-    // Handle login
+    this.authService.login(this.loginObj).subscribe(
+      () => {
+        this.isLoggedIn = true;
+      },
+      error => {
+        console.error('Login error:', error);
+      }
+    );
   }
 
+  onLogout() {
+    this.authService.logout();
+    this.isLoggedIn = false;
+  }
   addToCart(product: any) {
     this.cartService.addToCart(product);
     this.cartItems = this.cartService.getCartItems();
   }
 
   removeFromCart(item: CartItem, event: Event) {
-    event.stopPropagation(); 
+    event.stopPropagation();
     this.cartService.removeFromCart(item);
     this.cartItems = this.cartService.getCartItems();
   }
@@ -61,20 +64,12 @@ export class AppComponent {
     });
     return Array.from(uniqueItemsMap.values());
   }
+
   getUniqueProductCount(): number {
     return this.cartItems.length;
   }
 
   calculateTotalPrice(): number {
     return this.cartItems.reduce((total, item) => total + item.price, 0);
-  }
-  changeQuantity(cartItem: CartItem, action: 'increase' | 'decrease') {
-    if (action === 'increase') {
-      cartItem.quantity++;
-    } else {
-      if (cartItem.quantity > 1) {
-        cartItem.quantity--;
-      }
-    }
   }
 }

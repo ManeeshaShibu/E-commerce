@@ -18,6 +18,10 @@
     background-color: #f9f9f9; 
     border: none; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    /* justify-content: center;
+    align-items: center;
+   */
+
 }
 
 .dropdown-item {
@@ -68,6 +72,7 @@
 
 .dropdown-menu {
     width: 300px; 
+    justify-content: center;
   }
   
   .cart-item {
@@ -114,4 +119,46 @@
     text-align: center;
     padding: 10px;
   }
-  
+.login-form-container {
+  max-width: 300px;
+  margin: auto;
+}
+.login-form-container input[type="text"],
+.login-form-container input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.login-form-container button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+.login-form-container button:hover {
+  background-color: #0056b3;
+}
+.logout-button {
+  background-color: #dc3545; 
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none; 
+  display: inline-block; 
+}
+
+.logout-button:hover {
+  background-color: #c82333; 
+}
+
+
+ 

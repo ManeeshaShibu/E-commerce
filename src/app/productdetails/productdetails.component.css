@@ -7,6 +7,7 @@
 .product-image {
   margin-right: 20px; 
   margin-left: 20px;
+ 
 }
 
 .product-image img {
@@ -14,7 +15,7 @@
   height: auto; 
 }
 
-.product-details {
+.product-details {  
   flex: 1; 
 }
 

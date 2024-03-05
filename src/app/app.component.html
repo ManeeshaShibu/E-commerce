@@ -45,7 +45,8 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               <i class="fa fa-cart-plus fs-5 me-1" style="color: #202122;"></i>
-              <span class="badge rounded-pill text-bg-info position-absolute top-5 start-75 translate-middle">{{ getUniqueProductCount() }}</span>
+              <span class="badge rounded-pill text-bg-info position-absolute top-5 start-75 translate-middle">{{
+                getUniqueProductCount() }}</span>
             </a>
             <ul class="dropdown-menu menuOnLeft rounded-0 mt-2" aria-labelledby="navbarDropdown3">
               <ng-container *ngIf="cartItems.length != 0; else emptyCart">
@@ -57,7 +58,8 @@
                     </div>
                     <div>
                       <h6>{{ item.item.title }}</h6>
-                      <p>Price: ${{ item.item.price }} Qty: {{ item.count }}</p>
+                      <p>Price: ${{ item.item.price }}
+                        Qty: {{ item.count }}</p>
                     </div>
                     <button class="btn btn-sm btn-danger" (click)="removeFromCart(item.item, $event)">Remove</button>
                   </div>
@@ -85,24 +87,25 @@
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle redHover fw-semibold text-uppercase text-black  me-1" href="#"
-              id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle redHover fw-semibold text-uppercase text-black me-1" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fa fa-user fs-5 me-1" style="color: #202122;"></i>
             </a>
-            <ul class="dropdown-menu" style="left:-50px" aria-labelledby="navbarDropdown">
-              <li *ngIf="!loggedObj.custId">
-                <div class="d-flex justify-content-evenly mt-2">
-                  <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-                    aria-controls="offcanvasRight">
-                    <button class="btn btn-danger rounded-0 px-3">Login</button>
-                  </a>
-                  <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <button class="btn btn-danger rounded-0 px-3">Register</button>
-                  </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <div *ngIf="!isLoggedIn" class="login-form-container">
+                <div>
+                  <input type="text" [(ngModel)]="loginObj.username" placeholder="Username">
+                  <input type="password" [(ngModel)]="loginObj.password" placeholder="Password">
+                  <button (click)="onLogin()" class="login-button">Login</button>
                 </div>
+              </div>
+              <li *ngIf="isLoggedIn">
+                <a class="dropdown-item" href="#" (click)="onLogout()" class="logout-button">Logout</a>
               </li>
             </ul>
           </li>
+          
+          
+
           <li class="nav-item">
             <a class="nav-link" href="#"> </a>
           </li>
@@ -112,103 +115,6 @@
     </div>
   </nav>
 </header>
+
+
 <router-outlet></router-outlet>
-<div class="offcanvas offcanvas-end m-5" [ngClass]="loginModelClass" tabindex="-1" id="offcanvasRight"
-  aria-labelledby="offcanvasRightLabel">
-  <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">Sign In</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" (click)="loginModelClass= ''"
-      aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row ">
-          <div class="col-md-7 col-lg-12">
-            <div class="wrap">
-              <div class="login-wrap ">
-
-                <form action="#" class="signin-form">
-                  <div class="form-group mt-3">
-                    <input type="text" name="UserName" [(ngModel)]="loginObj.UserName" class="form-control" required>
-                    <label class="form-control-placeholder" for="username">Username</label>
-                  </div>
-                  <div class="form-group mt-4">
-                    <input id="password-field" name="UserPassword" [(ngModel)]="loginObj.UserPassword" type="password"
-                      class="form-control" required>
-                    <label class="form-control-placeholder" for="password">Password</label>
-                    <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                  </div>
-                  <div class="form-group">
-                    <button type="button" (click)="onLogin()"
-                      class=" my-4 form-control btn btn-primary rounded submit px-3">Sign In</button>
-                  </div>
-                  <div class="form-group d-md-flex">
-                    <div class="w-50 text-left">
-                      <label class="checkbox-wrap checkbox-primary mb-0">Remember Me
-                        <input type="checkbox" checked>
-                        <span class="checkmark"></span>
-                      </label>
-                    </div>
-                    <div class="w-50 text-md-right">
-                      <a href="#">Forgot Password</a>
-                    </div>
-                  </div>
-                </form>
-                <p class="text-center mt-4">Not a member? <a data-toggle="tab" href="#signup">Sign Up</a></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </div>
-</div>
-
-<!-- register model -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Register</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body ">
-        <div class="container">
-          <div class="row">
-            <div class="col-12 my-2">
-              <label for="">Full Name</label>
-              <input type="text" [(ngModel)]="registerObj.Name" class="form-control">
-
-            </div>
-            <div class="col-12 my-2">
-              <label for="">Email</label>
-              <input type="text" [(ngModel)]="registerObj.email" class="form-control">
-
-            </div>
-            <div class="col-12 my-2">
-              <label for="">Set Password</label>
-              <input type="password" [(ngModel)]="registerObj.Password" class="form-control">
-
-            </div>
-            <div class="col-12 my-2">
-              <label for="">Confirm Password</label>
-              <input type="password" [(ngModel)]="registerObj.Confirm" class="form-control">
-
-            </div>
-            <div class="col-12 my-2">
-              <label for="">Contact Number</label>
-              <input type="number" [(ngModel)]="registerObj.MobileNo" class="form-control">
-
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="onRegister()">Register</button>
-      </div>
-    </div>
-  </div>
-</div>
