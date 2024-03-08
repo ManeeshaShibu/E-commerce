@@ -23,7 +23,10 @@ export class AppComponent {
   constructor(private productService: ProductService, private http: HttpClient, private cartService: CartService, private authService: AuthService, private router: Router) {
     this.cartItems = this.cartService.getCartItems();
     this.isLoggedIn = this.authService.isLoggedIn();
-  }
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/home']); 
+    }
+    }
 
   onLogin() {
     this.authService.login(this.loginObj).subscribe(

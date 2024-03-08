@@ -6,6 +6,7 @@ import { CartItem } from '../cart/cart.model';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Product } from '../product/product.model';
+import { AuthService } from '../service/authservice'; 
 
 @Component({
   selector: 'app-product-details',
@@ -18,72 +19,78 @@ export class ProductDetailsComponent implements OnInit {
   editMode: boolean = false;
   editedProduct: any = {};
   cartItems: CartItem[] = [];
-  isLoading: boolean = false; 
+  isLoading: boolean = false;
+  isLoggedIn: boolean = false; 
 
   constructor(private route: ActivatedRoute,
     private productService: ProductService,
     private cartService: CartService,
-    private router: Router) { }
-    ngOnInit() {
-      const id = this.route.snapshot.paramMap.get('id');
-      this.productId = id !== null ? id : '';
-      console.log('Product ID:', this.productId);
-      this.getProductDetails();
-      this.cartItems = this.cartService.getCartItems();
-    }
-  
-    getProductDetails() {
-      console.log('Fetching product details...');
+    private router: Router,
+    private authService: AuthService) { } // Inject AuthService
+
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    this.productId = id !== null ? id : '';
+    console.log('Product ID:', this.productId);
+    this.getProductDetails();
+    this.cartItems = this.cartService.getCartItems();
+
+    // Check if user is logged in
+    this.isLoggedIn = this.authService.isLoggedIn();
+  }
+
+  getProductDetails() {
+    console.log('Fetching product details...');
+    this.isLoading = true;
+    this.productService.getProductById(this.productId)
+      .subscribe(
+        (response: Product) => {
+          console.log('API response:', response);
+          this.product = response;
+          console.log('Product:', this.product);
+          this.editedProduct = { ...response };
+        },
+        (error: HttpErrorResponse) => {
+          console.error('Error fetching product details:', error);
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  toggleEditMode() {
+    this.editMode = !this.editMode;
+  }
+
+  saveProductChanges() {
+    console.log('Saving product changes...');
+
+    if (this.product && this.product.id) {
+      console.log('Product ID:', this.product.id);
+      console.log('Updated Product:', this.editedProduct);
+
+      const { id, ...updatedProductWithoutId } = this.editedProduct;
+
       this.isLoading = true;
-      this.productService.getProductById(this.productId)
+      this.productService.updateProduct(this.product.id, updatedProductWithoutId)
         .subscribe(
-          (response: Product) => {
-            console.log('API response:', response);
-            this.product = response;
-            console.log('Product:', this.product);
-            this.editedProduct = { ...response };
+          (updatedProduct: any) => {
+            console.log('Product updated successfully:', updatedProduct);
+            this.product = { ...this.product, ...updatedProduct };
+            this.editMode = false;
           },
           (error: HttpErrorResponse) => {
-            console.error('Error fetching product details:', error);
+            console.error('Error updating product:', error);
           },
           () => {
             this.isLoading = false;
           }
         );
+    } else {
+      console.error('Cannot save changes: Product or Product ID is missing.');
     }
-  
-    toggleEditMode() {
-      this.editMode = !this.editMode;
-    }
-  
-    saveProductChanges() {
-      console.log('Saving product changes...');
-  
-      if (this.product && this.product.id) {
-        console.log('Product ID:', this.product.id);
-        console.log('Updated Product:', this.editedProduct);
-  
-        const { id, ...updatedProductWithoutId } = this.editedProduct;
-  
-        this.isLoading = true;
-        this.productService.updateProduct(this.product.id, updatedProductWithoutId)
-          .subscribe(
-            (updatedProduct: any) => {
-              console.log('Product updated successfully:', updatedProduct);
-              this.product = { ...this.product, ...updatedProduct };
-              this.editMode = false;
-            },
-            (error: HttpErrorResponse) => {
-              console.error('Error updating product:', error);
-            },
-            () => {
-              this.isLoading = false;
-            }
-          );
-      } else {
-        console.error('Cannot save changes: Product or Product ID is missing.');
-      }
-    }
+  }
 
   cancelEdit() {
     this.editedProduct = { ...this.product };

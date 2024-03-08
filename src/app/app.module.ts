@@ -10,6 +10,7 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
 import { ProductService } from './service/product.service';
 import { AuthService } from './service/authservice';
 import { PaginationComponent } from './pagination.component';
+import { HomepageComponent } from './homepage/homepage.component';
 
 
 @NgModule({
@@ -18,7 +19,9 @@ import { PaginationComponent } from './pagination.component';
     ProductGridComponent,
     ProductDetailsComponent,
     ProductEditComponent,
-    PaginationComponent
+    PaginationComponent,
+    HomepageComponent,
+
     ],
   imports: [
     BrowserModule,
@@ -26,8 +29,8 @@ import { PaginationComponent } from './pagination.component';
     HttpClientModule,
     FormsModule,
 
-    
-  ],
+
+      ],
   providers: [ProductService,AuthService],
   bootstrap: [AppComponent]
 })

@@ -17,6 +17,7 @@
 
 .product-details {  
   flex: 1; 
+  font-family: 'Merriweather', serif;;
 }
 
 .product-details h2 {

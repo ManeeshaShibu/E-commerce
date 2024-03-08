@@ -54,10 +54,16 @@
         </div>
 
         <div *ngIf="!editMode">
+            <ng-container *ngIf="isLoggedIn; else loginLink">
+                <!-- Add to cart button -->
+                <button class="btn btn-primary add-to-cart-btn" (click)="addToCart(product)">Add to Cart</button>
+            </ng-container>
+            <ng-template #loginLink>
+                <a [routerLink]="['/home']" class="btn btn-primary"> Add to Cart</a>
+            </ng-template>
             
-            <button class="btn btn-primary add-to-cart-btn" (click)="addToCart(product)">Add to Cart</button>
             <a [routerLink]="['/products', product.id, 'edit']" class="btn btn-secondary edit-btn">Edit</a>
         </div>
     </div>
 </div>
-
+    

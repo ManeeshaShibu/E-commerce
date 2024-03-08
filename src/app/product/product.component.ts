@@ -5,7 +5,7 @@ import { CartItem } from '../cart/cart.model';
 import { Product } from '../product/product.model';
 
 @Component({
-  selector: 'app-product',
+  selector: 'app-product-grid',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
@@ -15,6 +15,7 @@ export class ProductGridComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 10;
   totalPages: number = 1;
+  isLoading: boolean = true; 
 
   constructor(private http: HttpClient, private cartService: CartService) { }
 
@@ -40,9 +41,11 @@ export class ProductGridComponent implements OnInit {
         }));
         console.log('Products:', this.productsArray);
         this.totalPages = Math.ceil(this.productsArray.length / this.itemsPerPage);
+        this.isLoading = false; 
       },
       (error) => {
         console.error('Error fetching products:', error);
+        this.isLoading = false; 
       }
     );
   }
