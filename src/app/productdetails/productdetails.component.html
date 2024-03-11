@@ -1,69 +1,127 @@
-<div *ngIf="isLoading" class="product-details-container">
-    <p>Loading...</p>
-</div>
-
-<div *ngIf="!isLoading && product" class="product-details-container">
-    <div class="product-image">
-        <img [src]="product.thumbnail" alt="{{ product.title }} Image">
-    </div>
-    <div class="product-details">
-        <h2>{{ product.title }}</h2>
-        <p>{{ product.description }}</p>
-        <p class="price">Price: <span class="price-value">${{ product.price }}</span></p>
-        <p>Discount Percentage: {{ product.discountPercentage }}%</p>
-        <p>Rating: {{ product.rating }}</p>
-        <p>Stock: {{ product.stock }}</p>
-        <p>Brand: {{ product.brand }}</p>
-        <p>Category: {{ product.category }}</p>
-
-        <div *ngIf="editMode">
-            
-            <form (ngSubmit)="saveProductChanges()">
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <textarea id="description" name="description" [(ngModel)]="editedProduct.description" class="form-control"></textarea>
+           <div *ngIf="isLoading">
+            <div class="loader">
+                <div class="loader-wrapper">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <div class="form-group">
-                    <label for="price">Price:</label>
-                    <input type="number" id="price" name="price" [(ngModel)]="editedProduct.price" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="discountPercentage">Discount Percentage:</label>
-                    <input type="number" id="discountPercentage" name="discountPercentage" [(ngModel)]="editedProduct.discountPercentage" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="rating">Rating:</label>
-                    <input type="number" id="rating" name="rating" [(ngModel)]="editedProduct.rating" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="stock">Stock:</label>
-                    <input type="number" id="stock" name="stock" [(ngModel)]="editedProduct.stock" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="brand">Brand:</label>
-                    <input type="text" id="brand" name="brand" [(ngModel)]="editedProduct.brand" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <input type="text" id="category" name="category" [(ngModel)]="editedProduct.category" class="form-control">
-                </div>
-                
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
-            </form>
+            </div>
         </div>
+        <div class="pd-wrap">
+            <div class="container">
+        <div *ngIf="!isLoading && product" class="product-details-container">
+            <!-- Product details section -->
+            <div class="product-image">
+                <img [src]="product.thumbnail" alt="{{ product.title }} Image">
+            </div>
+            <div class="col-md-6">
+                <div class="product-dtl">
+                    <div class="product-info">
+                        <div class="reviews-counter">
+                            <div class="row">
+            <div class="product-details">
+                <h2>{{ product.title }}</h2>
+                <p>{{ product.description }}</p>
+                <p class="price">Price: <span class="price-value">${{ product.price }}</span></p>
+                <p>Discount Percentage: {{ product.discountPercentage }}%</p>
+                <p>Rating: {{ product.rating }}</p>
+                <p>Stock: {{ product.stock }}</p>
+                <p>Brand: {{ product.brand }}</p>
+                <p>Category: {{ product.category }}</p>
 
-        <div *ngIf="!editMode">
-            <ng-container *ngIf="isLoggedIn; else loginLink">
+               
+								<div class="rate">
+								    <input type="radio" id="star5" name="rate" value="5" checked />
+								    <label for="star5" title="text">5 stars</label>
+								    <input type="radio" id="star4" name="rate" value="4" checked />
+								    <label for="star4" title="text">4 stars</label>
+								    <input type="radio" id="star3" name="rate" value="3" checked />
+								    <label for="star3" title="text">3 stars</label>
+								    <input type="radio" id="star2" name="rate" value="2" />
+								    <label for="star2" title="text">2 stars</label>
+								    <input type="radio" id="star1" name="rate" value="1" />
+								    <label for="star1" title="text">1 star</label>
+								  </div>
+								<span>3 Reviews</span>
+							</div>
+	        			<div class="row">
+	        				<div class="col-md-6">
+	        					<label for="color">Color</label>
+								<select id="color" name="color" class="form-control">
+									<option>Blue</option>
+									<option>Green</option>
+									<option>Red</option>
+								</select>
+	        				</div>
+	        			</div>
+                            </div>			
+
+               <!-- Edit mode -->
+               <div *ngIf="editMode">
+                <div *ngIf="editMode">
+
+                    <form (ngSubmit)="saveProductChanges()">
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea id="description" name="description" [(ngModel)]="editedProduct.description"
+                                class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price:</label>
+                            <input type="number" id="price" name="price" [(ngModel)]="editedProduct.price" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="discountPercentage">Discount Percentage:</label>
+                            <input type="number" id="discountPercentage" name="discountPercentage"
+                                [(ngModel)]="editedProduct.discountPercentage" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="rating">Rating:</label>
+                            <input type="number" id="rating" name="rating" [(ngModel)]="editedProduct.rating"
+                                class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="stock">Stock:</label>
+                            <input type="number" id="stock" name="stock" [(ngModel)]="editedProduct.stock" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="brand">Brand:</label>
+                            <input type="text" id="brand" name="brand" [(ngModel)]="editedProduct.brand" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category:</label>
+                            <input type="text" id="category" name="category" [(ngModel)]="editedProduct.category"
+                                class="form-control">
+                        </div>
+        
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancel</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- View mode -->
+            <div *ngIf="!editMode">
                 <!-- Add to cart button -->
-                <button class="btn btn-primary add-to-cart-btn" (click)="addToCart(product)">Add to Cart</button>
-            </ng-container>
-            <ng-template #loginLink>
-                <a [routerLink]="['/home']" class="btn btn-primary"> Add to Cart</a>
-            </ng-template>
-            
-            <a [routerLink]="['/products', product.id, 'edit']" class="btn btn-secondary edit-btn">Edit</a>
+                <ng-container *ngIf="isLoggedIn; else loginLink">
+                    <button class="btn btn-primary add-to-cart-btn" (click)="addToCart(product)">Add to Cart</button>
+                </ng-container>
+                <ng-template #loginLink>
+                    <a [routerLink]="['/home']" class="btn btn-primary"> Add to Cart</a>
+                </ng-template>
+
+                <!-- Edit button -->
+                <a [routerLink]="['/products', product.id, 'edit']" class="btn btn-secondary edit-btn">Edit</a>
+            </div>
         </div>
+		</div>
+	</div>
     </div>
-</div>
+
+             
+
+
     

@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ViewChild, ElementRef } from '@angular/core';
 import Swiper from 'swiper';
 import { register } from 'swiper/element/bundle';
 
+
 register();
 
 @Component({

@@ -20,12 +20,16 @@ export class ProductGridComponent implements OnInit {
   constructor(private http: HttpClient, private cartService: CartService) { }
 
   ngOnInit() {
+    console.log('ngOnInit called');
     this.fetchProducts();
   }
 
   fetchProducts() {
+    console.log('Fetching products...');
+    this.isLoading = true;
     this.http.get<any>('https://dummyjson.com/products').subscribe(
       (data) => {
+        console.log('Products fetched successfully:', data);
         this.productsArray = data.products.map((product: any) => ({
           id: product.id,
           title: product.title,
