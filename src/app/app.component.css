@@ -205,7 +205,6 @@
   border-radius: var(--border-radius);
   padding: var(--spacer) 0;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.03);
-  overflow-x: hidden;
 }
 
 .navbar__link {
