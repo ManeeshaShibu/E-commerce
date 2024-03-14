@@ -49,13 +49,13 @@ export class ProductEditComponent implements OnInit {
 
   saveProductChanges() {
     console.log('Saving product changes...');
-    
+
     if (this.product && this.product.id) {
       console.log('Product ID:', this.product.id);
       console.log('Updated Product:', this.editedProduct);
-  
+
       const { id, ...updatedProductWithoutId } = this.editedProduct;
-  
+
       this.isLoading = true;
       this.productService.updateProduct(this.product.id, updatedProductWithoutId)
         .subscribe(
@@ -63,15 +63,12 @@ export class ProductEditComponent implements OnInit {
             console.log('Product updated successfully:', updatedProduct);
             this.product = { ...this.product, ...updatedProduct };
             this.editMode = false;
-            this.isLoading = false;
-            if (this.product?.id) {
-              this.router.navigate(['/products', this.product.id]);
-            } else {
-              console.error('Product ID is undefined.');
-            }
+            this.router.navigateByUrl(`/products/${this.product?.id}`);
           },
-          (error: HttpErrorResponse) => { 
+          (error: HttpErrorResponse) => {
             console.error('Error updating product:', error);
+          },
+          () => {
             this.isLoading = false;
           }
         );
@@ -81,8 +78,4 @@ export class ProductEditComponent implements OnInit {
   }
   
   
-  
-  cancelEdit(): void {
-    this.router.navigate(['/products', this.product?.id]);
-  }
 }

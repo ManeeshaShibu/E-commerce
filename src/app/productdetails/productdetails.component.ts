@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Product } from '../product/product.model';
 import { AuthService } from '../service/authservice'; 
 
+
 @Component({
   selector: 'app-product-details',
   templateUrl: './productdetails.component.html',
@@ -79,6 +80,9 @@ export class ProductDetailsComponent implements OnInit {
             console.log('Product updated successfully:', updatedProduct);
             this.product = { ...this.product, ...updatedProduct };
             this.editMode = false;
+
+            // Navigate to the product page upon successful update
+            this.router.navigateByUrl(`/products/${this.product.id}`);
           },
           (error: HttpErrorResponse) => {
             console.error('Error updating product:', error);
@@ -91,14 +95,25 @@ export class ProductDetailsComponent implements OnInit {
       console.error('Cannot save changes: Product or Product ID is missing.');
     }
   }
+  
+  addToCart(product: any, event: MouseEvent) {
+    // Prevent the default action of the click event
+    event.preventDefault();
 
-  cancelEdit() {
-    this.editedProduct = { ...this.product };
-    this.editMode = false;
-  }
+    // Add the loading class to the button
+    const button = event.currentTarget as HTMLButtonElement;
+    button.classList.add('loading');
 
-  addToCart(product: any) {
-    this.cartService.addToCart(product);
-    this.cartItems = this.cartService.getCartItems();
+    // Simulate a loading delay
+    setTimeout(() => {
+      // Add the product to the cart
+      this.cartService.addToCart(product);
+      
+      // Get updated cart items
+      this.cartItems = this.cartService.getCartItems();
+      
+      // Remove the loading class from the button
+      button.classList.remove('loading');
+    }, 3700);
   }
 }

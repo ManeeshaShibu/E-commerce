@@ -1,7 +1,7 @@
 <header>
   <!-- NavBar -->
   <nav class="navbar navbar-expand-lg navbar-light nav-yellow border-bottom border-top p-0">
-    <div class="container">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
       <a class="navbar-brand fs-4 fw-bold" routerLink="/home">
         <i class="fa fa-shoe-prints"></i>
         <span class="textBlur">SoleStride</span>
@@ -10,47 +10,31 @@
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0  text-center ">
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle fw-semibold text-uppercase  me-1 text-danger" routerLink="/home"
-              id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              home
-            </a>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 text-center">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/home"> <span>Home</span></a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle redHover fw-semibold text-uppercase text-black  me-1" href="#"
-              id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Categories
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <span> Categories</span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" routerLink="/products">Products</a></li>
-              </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle redHover fw-semibold text-uppercase text-black  me-1" href="#"
-              id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              About 
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Overview</a></li>
-              <li><a class="dropdown-item" href="#">Careers</a></li>
-              <li><a class="dropdown-item" href="#">Terms and Conditions</a></li>
+                <li><a class="dropdown-item" routerLink="/products">Products</a></li>
             </ul>
-          </li>
-
+        </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold text-uppercase text-black  me-1" href="#">Contact</a>
+            <a class="nav-link" href="#"><span>About</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"><i class="fa-fa-search fs-5" style="color: #0c0d0d;"></i></a>
+            <a class="nav-link" href="#"><span>Contact</span></a>
           </li>
+        
           <!-- cart -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-              <i class="fa fa-cart-plus fs-5 me-1" style="color: #202122;"></i>
+              <i class="fa fa-cart-plus fs-5 me-1" ></i>
               <span class="badge rounded-pill text-bg-info position-absolute top-5 start-75 translate-middle">{{
                 getUniqueProductCount() }}</span>
             </a>
@@ -93,8 +77,8 @@
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle redHover fw-semibold text-uppercase text-black me-1" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa fa-user fs-5 me-1" style="color: #202122;"></i>
+            <a class="nav-link dropdown-toggle redHover fw-semibold text-uppercase me-1" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-user fs-5 me-1" ></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <div *ngIf="!isLoggedIn" class="login-form-container">
@@ -118,4 +102,3 @@
   </nav>
 </header>
 <router-outlet></router-outlet>
-

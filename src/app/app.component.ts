@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../app/service/product.service';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../app/cart/cart.service';
@@ -6,12 +6,14 @@ import { CartItem } from '../app/cart/cart.model';
 import { AuthService } from './service/authservice';
 import { Router } from '@angular/router';
 
+declare const feather: any;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
   error: string = '';
   cartItems: CartItem[] = [];
@@ -20,13 +22,16 @@ export class AppComponent {
     "Password": ""
   };
 
-  constructor(private productService: ProductService, private http: HttpClient, private cartService: CartService, private authService: AuthService, private router: Router) {
+  constructor(private productService: ProductService, private http: HttpClient, private cartService: CartService, private authService: AuthService, private router: Router) {}
+
+  ngOnInit() {
     this.cartItems = this.cartService.getCartItems();
     this.isLoggedIn = this.authService.isLoggedIn();
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/home']); 
     }
-    }
+    feather.replace();
+  }
 
   onLogin() {
     this.authService.login(this.loginObj).subscribe(
